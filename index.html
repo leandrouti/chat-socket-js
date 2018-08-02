@@ -1,0 +1,65 @@
+<!doctype html>
+<html lang="en">
+	<head>
+		<meta charset="UTF-8">
+		<title>Document</title>
+	</head>
+	
+	<body>
+		<div id="app">
+			<h1>Hello World!!!</h1>
+
+			<ul>
+				<li v-for="msg in messages">{{ msg }}</li>
+			</ul>
+
+			<form @submit.prevent="send">
+				<input type="text" id="chat" v-model="message">
+
+				<input type="submit" value="Send">
+
+
+			</form>
+
+
+		</div>
+		
+		
+		
+		
+		
+		<script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/2.1.1/socket.io.js"></script>
+		<script src="https://cdnjs.cloudflare.com/ajax/libs/vue/2.5.17/vue.min.js"></script>
+
+		<script>
+			var socket = io();
+
+			new Vue({
+				el: '#app',
+
+				data : {
+					message : '',
+					messages : [],
+				},
+
+				methods: {
+					
+					send() {
+						socket.emit('message', this.message);
+						this.message = '';
+					},
+
+				},
+
+
+				mounted() {
+					console.log('mounted');
+					console.log(this.messages);
+					socket.on('message', function(msg){
+						this.messages.push(msg);
+					}.bind(this));
+				},
+			});
+		</script>
+	</body>
+</html>
